@@ -16,13 +16,14 @@ public class imageReader{
 		int height = 288;//Integer.parseInt(args[2]);
 		
 		try {
-			String path = new File(args).getParent();
-			int numImage = new File(path).list().length - 1;
+			// need to regenerate file name
+			// the current folder has one .wav file and .rgb file's'
+			int numImage = new File(new File(args).getParent()).list().length - 1;
 			imgSrc = new BufferedImage[numImage];
 			for(int i = 0; i < numImage; ++i)
 			{
-				imgSrc[i] = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-				// fileName Example : Sample001.rgb
+				// regenerate file name
+				// fileName example : Sample.rgb -> Sample001.rgb
 				String fileName = args.split("\\.")[0] + String.format("%03d", i + 1) + ".rgb";
 				
 				File file = new File(fileName);				
@@ -38,6 +39,7 @@ public class imageReader{
 					offset += numRead;
 				}
 	
+				imgSrc[i] = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);				
 				int ind = 0;
 				for(int y = 0; y < height; y++){	
 					for(int x = 0; x < width; x++){

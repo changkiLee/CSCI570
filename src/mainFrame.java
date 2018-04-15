@@ -23,24 +23,28 @@ public class mainFrame extends JFrame implements ActionListener {
 	private JPanel inputVideo;
 	private JPanel outputVideo;
 	
-	public JPanel createInput(String imgSrc, String soundSrc)
+	public JPanel createInputPanel(String imgSrc, String soundSrc)
 	{
 		JPanel inputPanel = new JPanel();
+		// text
 		JLabel inputText = new JLabel("Query: " + imgSrc);	
 		inputPanel.add(inputText);
 		
+		// video
 		inputVideo = createVideoPanel(imgSrc, soundSrc);
 		inputPanel.add(inputVideo);
 		
 		return inputPanel;
 	}
 	
-	public JPanel createOutput()
+	public JPanel createOutputPanel()
 	{
 		JPanel outputPanel = new JPanel();
+		// text
 		JLabel outputText = new JLabel("Matched Videos: ");		
 		outputPanel.add(outputText);
 				
+		// create radio buttons
 		ButtonGroup btnGroup = new ButtonGroup();
 		boolean status = true;
 		for(int i = 0; i < database.length; ++i)
@@ -52,11 +56,13 @@ public class mainFrame extends JFrame implements ActionListener {
 			status = false;
 		}
 		
+		// video
 		outputVideo = createVideoPanel(database[0]);
 		outputPanel.add(outputVideo);
 		return outputPanel;
 	}
 	
+	// create output video panel
 	public JPanel createVideoPanel(String src)
 	{
 		String imgSrc = src + ".rgb";
@@ -65,17 +71,21 @@ public class mainFrame extends JFrame implements ActionListener {
 		return video.getPanel();
 	}
 	
+	// create input video panel
 	public JPanel createVideoPanel(String imgSrc, String soundSrc)
 	{
 		Player video = new Player(imgSrc, soundSrc);
 		return video.getPanel();
 	}
 	
+	// radio button selection
 	public void actionPerformed(ActionEvent e) {
         String selected = e.getActionCommand();
+        // change video panel
         rightPanel.remove(outputVideo);
         outputVideo = createVideoPanel(selected);
         rightPanel.add(outputVideo);
+        // refresh
         rightPanel.revalidate();
         rightPanel.repaint();
     }
@@ -85,8 +95,8 @@ public class mainFrame extends JFrame implements ActionListener {
 		super("CSCI570");
 		int windowWidth = 800;
 		int windowHeight = 800;
-		leftPanel = createInput(args[0], args[1]);
-		rightPanel = createOutput();
+		leftPanel = createInputPanel(args[0], args[1]);
+		rightPanel = createOutputPanel();
 		add(leftPanel);
 		add(rightPanel);
 		
