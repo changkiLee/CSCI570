@@ -7,6 +7,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
+import soundFFT.FFT;
+import soundFFT.SoundMath;
+import soundFFT.WavSoundInput;
+
 @SuppressWarnings("serial")
 public class mainFrame extends JFrame implements ActionListener {
 	static final String[] database = {
@@ -23,8 +27,7 @@ public class mainFrame extends JFrame implements ActionListener {
 	private JPanel inputVideo;
 	private JPanel outputVideo;
 	
-	public JPanel createInputPanel(String imgSrc, String soundSrc)
-	{
+	public JPanel createInputPanel(String imgSrc, String soundSrc) {
 		JPanel inputPanel = new JPanel();
 		// text
 		JLabel inputText = new JLabel("Query: " + imgSrc);	
@@ -32,13 +35,12 @@ public class mainFrame extends JFrame implements ActionListener {
 		
 		// video
 		inputVideo = createVideoPanel(imgSrc, soundSrc);
-		inputPanel.add(inputVideo);
+		inputPanel.add(inputVideo);		
 		
 		return inputPanel;
 	}
 	
-	public JPanel createOutputPanel()
-	{
+	public JPanel createOutputPanel() {
 		JPanel outputPanel = new JPanel();
 		// text
 		JLabel outputText = new JLabel("Matched Videos: ");		
@@ -63,8 +65,7 @@ public class mainFrame extends JFrame implements ActionListener {
 	}
 	
 	// create output video panel
-	public JPanel createVideoPanel(String src)
-	{
+	public JPanel createVideoPanel(String src) {
 		String imgSrc = src + ".rgb";
 		String soundSrc = src + ".wav";
 		Player video = new Player(imgSrc, soundSrc);
@@ -90,8 +91,7 @@ public class mainFrame extends JFrame implements ActionListener {
         rightPanel.repaint();
     }
 	
-	public mainFrame(String[] args)
-	{
+	public mainFrame(String[] args)	{
 		super("CSCI570");
 		int windowWidth = 800;
 		int windowHeight = 800;
@@ -107,10 +107,30 @@ public class mainFrame extends JFrame implements ActionListener {
 		setVisible(true);
 	}
 	
-	public static void main(String[] args) {
-		if(args.length != 2)
+	// get power spectrum array
+	public static double[] getPowerSpectrum(String src) throws Exception {
+		WavSoundInput inputSound = new WavSoundInput(src);
+		return SoundMath.powerLog(new FFT().apply(SoundMath.multiply(SoundMath.hamming, inputSound.chunk())));
+	}
+	
+	public static double measureSimilarity(double[] lhs, double[] rhs) {
+		if(lhs.length != rhs.length) return 0.0;
+		double sum = 0;
+		for(int i = 0; i < lhs.length; ++i) {
+			sum += Math.abs(lhs[i] - rhs[i]);
+		}
+		return sum / lhs.length;
+	}
+	
+	public static void main(String[] args) throws Exception {
+		if(args.length != 2) {
 			System.out.print("Arguments Error");
-		else
+		}
+		else {
+			for(String s : database) {
+				System.out.println(measureSimilarity(getPowerSpectrum(args[1]), getPowerSpectrum(s + ".wav")));
+			}
 			new mainFrame(args);
+		}
 	}
 }
