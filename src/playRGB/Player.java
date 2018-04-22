@@ -1,3 +1,5 @@
+package playRGB;
+import java.awt.Adjustable;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,16 +12,17 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.Timer;
 import sun.audio.*;
-import playRGB.imageReader;
 
 public class Player extends MouseAdapter {
-	final static int FRAME_DELAY = 33;
+	final static int FRAME_DELAY = 30;
 	// controller
 	private JButton playBtn = new JButton("Play");
 	private JButton pauseBtn = new JButton("Pause");
 	private JButton stopBtn = new JButton("Stop");
+	private JScrollBar scroll = new JScrollBar(Adjustable.HORIZONTAL, 0, 0, 0, 100);
 
 	// image variables
 	private String imgPath;
@@ -43,22 +46,24 @@ public class Player extends MouseAdapter {
 	
 	public JPanel getPanel()
 	{
-		JPanel videoPanel = new JPanel(new GridLayout(2, 1));
+		JPanel videoPanel = new JPanel(new GridLayout(3, 1));
 		JLabel pic = new JLabel();	
 		pic.setIcon(new ImageIcon(ims.imgSrc[0]));  // first frame image
 		tm = new Timer(FRAME_DELAY, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				pic.setIcon(new ImageIcon(ims.imgSrc[framePos++]));  // change image to next frame
-                // when video playback is complete
+				scroll.setValue(framePos * 100 / ims.imgSrc.length);
+				// when video playback is complete
 				if(framePos >= ims.imgSrc.length) {
                     videoStop();
                 }
             }
 		});
-		videoPanel.add(pic);
-		videoPanel.add(createCtrlPanel());
 		
+		videoPanel.add(pic);		
+		videoPanel.add(scroll);
+		videoPanel.add(createCtrlPanel());
 		return videoPanel;
 	}
 	
@@ -113,4 +118,5 @@ public class Player extends MouseAdapter {
 		pauseBtn.addMouseListener(this);
 		stopBtn.addMouseListener(this);
 	}
+
 }

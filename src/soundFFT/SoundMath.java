@@ -37,10 +37,17 @@ public class SoundMath {
 	public static double[] powerLog(double[] input) {
 		double[] result = new double[input.length/2];
 		for (int i = 0; i < result.length; i++) {
-			double abs = 2*Math.sqrt(input[i * 2] * input[i * 2]
-					+ input[i * 2 + 1] * input[i * 2 + 1]);
+			double abs = 2*Math.sqrt(input[i * 2] * input[i * 2] + input[i * 2 + 1] * input[i * 2 + 1]);
 			double scaled = abs / result.length; // not counting the window.
 			result[i] = -20 * Math.log(scaled);
+		}
+		return result;
+	}
+	
+	public static double[] dpcm(double[] input) {
+		double[] result = new double[input.length - 1];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = input[i+1] - input[i];
 		}
 		return result;
 	}
