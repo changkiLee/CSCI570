@@ -90,6 +90,7 @@ public class Player extends MouseAdapter {
 	private void videoStop() {
 		tm.stop();
 		framePos = 0;
+		scroll.setValue(0);
 		AudioPlayer.player.stop(as);
 		try {
 			as = new AudioStream(new FileInputStream(soundPath));

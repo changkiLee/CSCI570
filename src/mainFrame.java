@@ -60,7 +60,9 @@ public class mainFrame extends JFrame implements ActionListener {
 		boolean status = true;
 		for(int i = 0; i < database.length; i++)
 		{			
-			JRadioButton btn = new JRadioButton(database[i] + " : " + (DisSimilarity[i]*100) + "%", status);
+			JRadioButton btn = new JRadioButton(database[i], status);
+			JLabel similarity = new JLabel("(" + (DisSimilarity[i]*100) + "%)");
+			outputPanel.add(similarity);
 			btn.addActionListener(this);
 			btnGroup.add(btn);
 			outputPanel.add(btn);
@@ -183,7 +185,7 @@ public class mainFrame extends JFrame implements ActionListener {
 			g.setColor(Color.RED);
 			for(int i = 0; i < soundDisSimilarityList[dbIdx].length; i++) {
 				int currY = (int)(soundDisSimilarityList[dbIdx][i] * 100);			
-				g.fillRect(i, 700-currY, 1, currY);
+				g.fillRect(i, 800-currY, 1, currY);
 			}
 		}
 	}
