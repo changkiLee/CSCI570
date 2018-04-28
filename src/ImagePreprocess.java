@@ -20,6 +20,7 @@ public class ImagePreprocess {
 	static final int IMG_WIDTH = 299;
 	static final int IMG_HEIGHT = 299;
 	static final String VIDEO_DIR = "C:\\Users\\garym\\workspace\\HelloTF\\databse_videos\\";
+	static final String QUERY_DIR = "C:\\Users\\garym\\workspace\\HelloTF\\query_videos\\query\\";
 
 	public static File getImgFile(String args) {
 		File file = new File(args);
@@ -102,6 +103,10 @@ public class ImagePreprocess {
 
 	public static File[] getVideoImages(String label) throws IOException {
 		return getVideoImages(label, VIDEO_DIR);
+	}
+
+	public static File[] getQueryVideoImages(String label) throws IOException {
+		return getVideoImages(label, QUERY_DIR);
 	}
 
 	public static List<byte[]> ImagesToBytes(File[] foundFiles) throws IOException {

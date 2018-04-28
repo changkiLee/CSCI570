@@ -8,6 +8,16 @@ import java.util.List;
 import java.util.Set;
 
 public class ObjectsMatching {
+	
+	public static float getMaxScore(List<Float> scores){
+		float best = 0.0f;
+		for(float score : scores){
+			if(score>best){
+				best = score;
+			}
+		}
+		return best;
+	}
 
 	public static List<Integer> loadObjectsList(String label) {
 		List<Integer> objectsList = new ArrayList<>();
@@ -41,17 +51,17 @@ public class ObjectsMatching {
 		return false;
 	}
 	
-	public static List<Integer> getMatchingDistance(List<Integer> query, List<Integer> database){
+	public static List<Integer> getMatchingDistance(List<Integer> query, List<Integer> database,int stride){
 		int querySize = query.size();
 		int databaseSize = database.size();
 		List<Integer> results = new ArrayList<>();
-		for(int index = 0; index < (databaseSize - querySize); index++){
-			results.add(getMatchingDistance(query,database,index));
+		for(int index = 0; index < (databaseSize - querySize*stride); index++){
+			results.add(getMatchingDistance(query,database,index,stride));
 		}
 		return results;
 	}
 
-	public static List<Float> getMatchingScore(ArrayList<Integer> distance, int querySize ){
+	public static List<Float> getMatchingScore(List<Integer> distance, int querySize ){
 		List<Float> results = new ArrayList<>();
 		for(int d : distance){
 			results.add((querySize - d)/(float)querySize);
@@ -59,8 +69,12 @@ public class ObjectsMatching {
 		return results; 
 	}
 	
-	public static int getMatchingDistance(List<Integer> query, List<Integer> database, int startIndex) {
+	public static int getMatchingDistance(List<Integer> query, List<Integer> database, int startIndex,int stride) {
 		int querySize = query.size(); 
+		if(database.size()<startIndex+querySize*stride){
+			System.out.println("something funny");
+			return 0;
+		}
 		int[] v0 = new int[querySize+1];
 		int[] v1 = new int[querySize+1];
 		for(int i = 0; i < v0.length; i++){
@@ -68,11 +82,12 @@ public class ObjectsMatching {
 		}
 		for(int i = 0; i < v0.length; i++){
 			v1[0] = i+1;
-			for(int j = 0; j < querySize; j++ ){
+			for(int j = 0; j < querySize; j ++ ){
+				
 				int deletionCost = v0[j+1] +1;
 				int insertionCost = v1[j] +1;
 				int substitutionCost;
-				if (query.get(j).equals(database.get(startIndex+i))){
+				if (query.get(j).equals(database.get(startIndex+i*stride))){
 					substitutionCost = v0[j];
 				}
 				else{
