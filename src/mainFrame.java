@@ -97,7 +97,7 @@ public class mainFrame extends JFrame implements ActionListener {
 	
 	public mainFrame(String arg)	{
 		super("CSCI570");
-		int windowWidth = 2200;
+		int windowWidth = 2300;
 		int windowHeight = 600;
 		leftPanel = createInputPanel(arg);
 		rightPanel = createOutputPanel();
@@ -210,7 +210,7 @@ public class mainFrame extends JFrame implements ActionListener {
 		
 		public void drawImageGraph(Graphics g, int x, int y) {
 			int graphHeight = 200;
-			int graphWidth = 450;
+			int graphWidth = 550;
 			int gap = 50;
 			
 			// draw graph
@@ -272,7 +272,7 @@ public class mainFrame extends JFrame implements ActionListener {
 			}
 			// draw x-y axis
 			g.setColor(Color.black);
-			g.drawString("Sound Power Spectrum", x, y + gap);
+			g.drawString("Sound Power Spectrum", x, y + gap - 20);
 			g.drawLine(x, y + graphHeight + gap, x + graphWidth, y + graphHeight + gap); // x-axis
 			for(int i = 0; i <= graphWidth; i+= 100) {
 				g.drawString(Integer.toString(i), x + i, y + graphHeight + gap + 10);		
